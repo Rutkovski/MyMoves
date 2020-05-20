@@ -1,11 +1,16 @@
 <resources>
-    <string name="app_name">MyMoves</string>
-    <string name="poster_of_movie">Постер к фильму</string>
-    <string name="top_rated">Наиболее рейтинговые</string>
-    <string name="most_popular">Самые популярные</string>
-    <string name="add_to_favourite">Добавлено в избранное</string>
-    <string name="remove_from_favourite">Удалено из избранного</string>
-    <string name="item_main">Главная</string>
-    <string name="item_favourite">Избранное</string>
-    <string name="launch_trailer">Запустить трейлер</string>
+    <string name="app_name">FavoriteFilms</string>
+    <string name="label_description">Overview:</string>
+    <string name="poster_of_movie">Poster of movie</string>
+    <string name="top_rated">Top rated</string>
+    <string name="most_popular">Most Popular</string>
+    <string name="label_title">Launch trailer</string>
+    <string name="label_release_date">Release date:</string>
+    <string name="item_favourite">Favourite</string>
+    <string name="label_rating">Rating:</string>
+    <string name="add_to_favourite">Added to favourite</string>
+    <string name="remove_from_favourite">Remove from favourite</string>
+    <string name="item_main">Main</string>
+    <string name="label_original_title">Original title:</string>
+    <string name="launch_trailer">Launch trailer</string>
 </resources>

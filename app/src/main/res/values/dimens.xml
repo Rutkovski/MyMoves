@@ -1,4 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="size_of_star">60dp</dimen>
+    <dimen name="star_margin">16dp</dimen>
+    <dimen name="size_of_star_land">40dp</dimen>
+    <dimen name="progress_bar_size">42dp</dimen>
+    <dimen name="play_size">60dp</dimen>
+    <dimen name="margin_text_from_switch">8dp</dimen>
+    <dimen name="margin_top_posters_recycler">8dp</dimen>
+    <dimen name="margin_from_left_screen">8dp</dimen>
+    <dimen name="margin_vertical">8dp</dimen>
+    <dimen name="margin_from_right_screen">8dp</dimen>
+    <dimen name="margin_line">4dp</dimen>
+    <dimen name="height_line">1dp</dimen>
+    <dimen name="padding_overview_bottom">10dp</dimen>
+    <dimen name="margin_review">8dp</dimen>
+    <dimen name="margin_cardview_review">8dp</dimen>
+    <dimen name="margin_cardview_trailer">8dp</dimen>
+    <dimen name="margin_trailer_icon">8dp</dimen>
+    <dimen name="margin_trailer_name_fo_video">8dp</dimen>
 </resources>
