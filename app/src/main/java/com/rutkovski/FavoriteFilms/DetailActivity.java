@@ -109,13 +109,13 @@ public class DetailActivity extends AppCompatActivity {
         }
 
 
-        Picasso.get().load(movie.getBigPosterPath()).placeholder(R.drawable.placeholder_large).into(imageViewBigPoster);
+        Picasso.get().load(movie.getBigPosterPath()).placeholder(R.drawable.cinema).into(imageViewBigPoster);
         textViewTitle.setText(movie.getTitle());
         textViewOriginalTitle.setText(movie.getOriginalTitle());
         textViewRating.setText(Double.toString(movie.getVoteAverage()));
         textViewReleaseDate.setText(movie.getReleaseDate());
         textViewOverview.setText(movie.getOverview());
-        setFavourite();
+
 
         recyclerViewTrailers = findViewById(R.id.recyclerViewTrailers);
         recyclerViewReviews = findViewById(R.id.recyclerViewReviews);
@@ -127,9 +127,6 @@ public class DetailActivity extends AppCompatActivity {
             public void onTrailerClick(String url) {
                 Intent intentToTrailer = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                 startActivity(intentToTrailer);
-
-
-
             }
         });
         recyclerViewTrailers.setLayoutManager(new LinearLayoutManager(this));
@@ -144,7 +141,12 @@ public class DetailActivity extends AppCompatActivity {
         trailerAdapter.setTrailers(trailers);
         scrollViewInfo.smoothScrollTo(0,0);
 
+    }
 
+    @Override
+    protected void onStart() {
+        setFavourite();
+        super.onStart();
     }
 
     public void onCLickChangeFavourite(View view) {

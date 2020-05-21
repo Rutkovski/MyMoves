@@ -13,4 +13,6 @@
     <string name="item_main">Main</string>
     <string name="label_original_title">Original title:</string>
     <string name="launch_trailer">Launch trailer</string>
+    <string name="favorite_activity_title">Favorite</string>
+    <string name="details_activity_title">Review</string>
 </resources>

@@ -11,8 +11,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.rutkovski.FavoriteFilms.FavouriteActivity"/>
-        <activity android:name="com.rutkovski.FavoriteFilms.DetailActivity" />
+        <activity android:name="com.rutkovski.FavoriteFilms.FavouriteActivity"
+            android:label="@string/favorite_activity_title"
+            />
+        <activity android:name="com.rutkovski.FavoriteFilms.DetailActivity"
+            android:label="@string/details_activity_title"/>
         <activity android:name="com.rutkovski.FavoriteFilms.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

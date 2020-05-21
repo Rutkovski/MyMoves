@@ -14,4 +14,6 @@
     <string name="label_release_date">Дата релиза:</string>
     <string name="app_name">FavoriteFilms</string>
     <string name="label_description">Описание:</string>
+    <string name="favorite_activity_title">Избранное</string>
+    <string name="details_activity_title">Обзор фильма</string>
 </resources>

@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.ClipData;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -32,6 +33,8 @@ public class FavouriteActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
+        MenuItem main = menu.findItem(R.id.itemFavourite);
+        main.setVisible(false);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -42,10 +45,12 @@ public class FavouriteActivity extends AppCompatActivity {
             case R.id.itemMain:
                 Intent intent = new Intent(this, MainActivity.class);
                 startActivity(intent);
+                finish();
                 break;
             case R.id.itemFavourite:
                 Intent intentToFavourite = new Intent(this, FavouriteActivity.class);
                 startActivity(intentToFavourite);
+                finish();
                 break;
         }
         return super.onOptionsItemSelected(item);
