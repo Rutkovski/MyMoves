@@ -1,8 +1,8 @@
 package com.rutkovski.FavoriteFilms.utils;
 
-import com.rutkovski.FavoriteFilms.data.Movie;
-import com.rutkovski.FavoriteFilms.data.Review;
-import com.rutkovski.FavoriteFilms.data.Trailer;
+import com.rutkovski.FavoriteFilms.data.pojo.Movie;
+import com.rutkovski.FavoriteFilms.data.pojo.Review;
+import com.rutkovski.FavoriteFilms.data.pojo.Trailer;
 
 import org.json.JSONArray;
 import org.json.JSONException;

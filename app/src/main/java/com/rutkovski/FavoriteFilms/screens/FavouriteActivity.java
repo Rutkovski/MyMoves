@@ -1,4 +1,10 @@
-package com.rutkovski.FavoriteFilms;
+package com.rutkovski.FavoriteFilms.screens;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
@@ -9,17 +15,10 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.ClipData;
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-
+import com.rutkovski.FavoriteFilms.R;
 import com.rutkovski.FavoriteFilms.adapters.MovieAdapter;
 import com.rutkovski.FavoriteFilms.data.FavouriteMovie;
-import com.rutkovski.FavoriteFilms.data.MainViewModel;
-import com.rutkovski.FavoriteFilms.data.Movie;
+import com.rutkovski.FavoriteFilms.data.pojo.Movie;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,7 +64,7 @@ public class FavouriteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favourite);
         ActionBar actionBar = getSupportActionBar();
-        if (actionBar!=null) {
+        if (actionBar != null) {
             actionBar.setHomeButtonEnabled(true);
             actionBar.setDisplayHomeAsUpEnabled(true);
         }

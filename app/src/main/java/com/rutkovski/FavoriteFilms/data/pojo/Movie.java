@@ -1,4 +1,4 @@
-package com.rutkovski.FavoriteFilms.data;
+package com.rutkovski.FavoriteFilms.data.pojo;
 
 import androidx.room.Entity;
 import androidx.room.Ignore;

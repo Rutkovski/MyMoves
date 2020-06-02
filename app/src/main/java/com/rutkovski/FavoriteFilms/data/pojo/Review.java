@@ -1,4 +1,4 @@
-package com.rutkovski.FavoriteFilms.data;
+package com.rutkovski.FavoriteFilms.data.pojo;
 
 public class Review {
     private String author;

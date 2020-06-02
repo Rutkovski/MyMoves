@@ -1,4 +1,4 @@
-package com.rutkovski.FavoriteFilms.data;
+package com.rutkovski.FavoriteFilms.screens;
 
 import android.app.Application;
 import android.os.AsyncTask;
@@ -6,6 +6,10 @@ import android.os.AsyncTask;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+
+import com.rutkovski.FavoriteFilms.data.FavouriteMovie;
+import com.rutkovski.FavoriteFilms.data.pojo.Movie;
+import com.rutkovski.FavoriteFilms.data.MovieDatabase;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;

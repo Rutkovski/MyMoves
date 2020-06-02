@@ -6,6 +6,8 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 
+import com.rutkovski.FavoriteFilms.data.pojo.Movie;
+
 import java.util.List;
 
 @Dao

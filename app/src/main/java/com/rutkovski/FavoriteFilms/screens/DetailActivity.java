@@ -1,4 +1,4 @@
-package com.rutkovski.FavoriteFilms;
+package com.rutkovski.FavoriteFilms.screens;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -20,13 +19,13 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.rutkovski.FavoriteFilms.R;
 import com.rutkovski.FavoriteFilms.adapters.ReviewAdapter;
 import com.rutkovski.FavoriteFilms.adapters.TrailerAdapter;
 import com.rutkovski.FavoriteFilms.data.FavouriteMovie;
-import com.rutkovski.FavoriteFilms.data.MainViewModel;
-import com.rutkovski.FavoriteFilms.data.Movie;
-import com.rutkovski.FavoriteFilms.data.Review;
-import com.rutkovski.FavoriteFilms.data.Trailer;
+import com.rutkovski.FavoriteFilms.data.pojo.Movie;
+import com.rutkovski.FavoriteFilms.data.pojo.Review;
+import com.rutkovski.FavoriteFilms.data.pojo.Trailer;
 import com.rutkovski.FavoriteFilms.utils.JSONUtils;
 import com.rutkovski.FavoriteFilms.utils.NetworkUtils;
 import com.squareup.picasso.Picasso;

@@ -1,4 +1,4 @@
-package com.rutkovski.FavoriteFilms.data;
+package com.rutkovski.FavoriteFilms.data.pojo;
 
 public class Trailer {
     private String key;

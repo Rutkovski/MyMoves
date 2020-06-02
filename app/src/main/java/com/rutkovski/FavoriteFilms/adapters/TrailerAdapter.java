@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.rutkovski.FavoriteFilms.R;
-import com.rutkovski.FavoriteFilms.data.Trailer;
+import com.rutkovski.FavoriteFilms.data.pojo.Trailer;
 
 import java.util.ArrayList;
 

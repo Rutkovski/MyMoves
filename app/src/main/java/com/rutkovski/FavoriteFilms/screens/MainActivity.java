@@ -1,4 +1,4 @@
-package com.rutkovski.FavoriteFilms;
+package com.rutkovski.FavoriteFilms.screens;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,9 +23,9 @@ import androidx.loader.content.Loader;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.rutkovski.FavoriteFilms.R;
 import com.rutkovski.FavoriteFilms.adapters.MovieAdapter;
-import com.rutkovski.FavoriteFilms.data.MainViewModel;
-import com.rutkovski.FavoriteFilms.data.Movie;
+import com.rutkovski.FavoriteFilms.data.pojo.Movie;
 import com.rutkovski.FavoriteFilms.utils.JSONUtils;
 import com.rutkovski.FavoriteFilms.utils.NetworkUtils;
 
