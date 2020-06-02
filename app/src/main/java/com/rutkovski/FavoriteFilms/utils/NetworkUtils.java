@@ -28,6 +28,7 @@ public class NetworkUtils {
     private static final String BASE_URL_REVIEWS = "https://api.themoviedb.org/3/movie/%s/reviews";
 
     private static final String PARAMS_API_KEY = "api_key";
+
     private static final String PARAMS_LANGUAGE = "language";
     private static final String PARAMS_SORT_BY = "sort_by";
     private static final String PARAMS_PAGE = "page";
