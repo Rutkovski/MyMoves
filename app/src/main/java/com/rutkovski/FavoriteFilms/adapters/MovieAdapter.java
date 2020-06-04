@@ -1,15 +1,20 @@
 package com.rutkovski.FavoriteFilms.adapters;
 
+import android.app.Application;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.rutkovski.FavoriteFilms.R;
 import com.rutkovski.FavoriteFilms.data.pojo.Movie;
+import com.rutkovski.FavoriteFilms.utils.JSONUtils;
+import com.rutkovski.FavoriteFilms.utils.NetworkUtils;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -41,6 +46,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         this.onReachEndListener = onReachEndListener;
     }
 
+
     @NonNull
     @Override
     public MovieViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
@@ -50,12 +56,16 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
     @Override
     public void onBindViewHolder(@NonNull MovieViewHolder movieViewHolder, int i) {
-        if (movies.size() >= 20 && i > movies.size() - 4 && onReachEndListener != null) {
+
+        if (movies.size() >= 20 && movieViewHolder.getAdapterPosition() == movies.size() - 4 && onReachEndListener != null) {
             onReachEndListener.onReachEnd();
         }
 
         Movie movie = movies.get(i);
-        Picasso.get().load(movie.getPosterPath()).into(movieViewHolder.imageViewSmallPoster);
+
+
+        Picasso.get().load(JSONUtils.BASE_POSTER_URL+JSONUtils.SMALL_POSTER_SIZE+movie.getPosterPath()).into(movieViewHolder.imageViewSmallPoster);
+
     }
 
     @Override
@@ -73,6 +83,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
                     if (onPosterClickListener != null) {
                         onPosterClickListener.onPosterClick(getAdapterPosition());
                     }

@@ -3,6 +3,7 @@ package com.rutkovski.FavoriteFilms.screens;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -13,34 +14,25 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.loader.app.LoaderManager;
-import androidx.loader.content.Loader;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.rutkovski.FavoriteFilms.R;
 import com.rutkovski.FavoriteFilms.adapters.MovieAdapter;
 import com.rutkovski.FavoriteFilms.data.pojo.Movie;
-import com.rutkovski.FavoriteFilms.utils.JSONUtils;
 import com.rutkovski.FavoriteFilms.utils.NetworkUtils;
 
-import org.json.JSONObject;
-
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<JSONObject> {
-    private static final int LOADER_ID = 133;
-    private static int page = 1;
+public class MainActivity extends AppCompatActivity {
     private static int methodOfSort;
-    private static boolean isLoading = false;
+    private static boolean isLoading = true;
     private RecyclerView recyclerViewPosters;
     private MovieAdapter movieAdapter;
     private Switch switchSort;
@@ -48,8 +40,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private TextView textViewPopularity;
     private ProgressBar progressBarLoading;
     private MainViewModel viewModel;
-    private LoaderManager loaderManager;
-    private static String lang;
+    private int page;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -89,19 +80,15 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        lang = Locale.getDefault().getLanguage();
-        loaderManager = LoaderManager.getInstance(this);
-        viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
 
+        viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
         recyclerViewPosters = findViewById(R.id.RecyclerViewPosters);
         switchSort = findViewById(R.id.switchSort);
         textViewTopRated = findViewById(R.id.textViewTopRated);
         textViewPopularity = findViewById(R.id.textViewPopularity);
         progressBarLoading = findViewById(R.id.progressBarLoading);
-
         recyclerViewPosters.setLayoutManager(new GridLayoutManager(this, getColumnCount()));
         movieAdapter = new MovieAdapter();
-
         recyclerViewPosters.setAdapter(movieAdapter);
 
         switchSort.setChecked(true);
@@ -114,6 +101,35 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             }
         });
         switchSort.setChecked(false);
+
+
+
+        viewModel.getMovies().observe(this, new Observer<List<Movie>>() {
+            @Override
+            public void onChanged(List<Movie> movies) {
+//                if(page == 1){
+//                Log.i("test", "Устанавливаем фильмы в адаптер" + movies.size());
+//                movieAdapter.setMovies(movies);
+//                progressBarLoading.setVisibility(View.INVISIBLE);
+//                isLoading =false;
+//                }
+            }
+        });
+
+
+        viewModel.getNewMovies().observe(this, new Observer<List<Movie>>() {
+            @Override
+            public void onChanged(List<Movie> movies) {
+                Log.i("test", "Устанавливаем фильмы в адаптер" + movies.size());
+
+                movieAdapter.addMovies(movies);
+                progressBarLoading.setVisibility(View.INVISIBLE);
+                page++;
+                isLoading=false;
+            }
+        });
+
+
 
         movieAdapter.setOnPosterClickListener(new MovieAdapter.OnPosterClickListener() {
             @Override
@@ -128,18 +144,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         movieAdapter.setOnReachEndListener(new MovieAdapter.OnReachEndListener() {
             @Override
             public void onReachEnd() {
-                if (!isLoading) {
-                    downloadDate(methodOfSort, page);
-                }
-            }
-        });
-
-        LiveData<List<Movie>> moviesFromLiveData = viewModel.getMovies();
-        moviesFromLiveData.observe(this, new Observer<List<Movie>>() {
-            @Override
-            public void onChanged(List<Movie> movies) {
-                if (page == 1) {
-                    movieAdapter.setMovies(movies);
+                if(!isLoading) {
+                    Log.i("test", "блок слушателя конца списка");/*
+                    progressBarLoading.setVisibility(View.VISIBLE);
+                    viewModel.loadDate(methodOfSort, page);*/
                 }
             }
         });
@@ -165,53 +173,12 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             textViewPopularity.setTextColor(getResources().getColor(R.color.colorAccent));
             textViewTopRated.setTextColor(getResources().getColor(R.color.white_color));
         }
-        downloadDate(methodOfSort, page);
+        Log.i("test", "сработал переключатель");
+        movieAdapter.clear();
+        progressBarLoading.setVisibility(View.VISIBLE);
+        viewModel.loadDate(methodOfSort,page);
     }
 
-    private void downloadDate(int methodOfSort, int page) {
-        URL url = NetworkUtils.buildURL(methodOfSort, page, lang);
-        Bundle bundle = new Bundle();
-        bundle.putString("url", url.toString());
-        loaderManager.restartLoader(LOADER_ID, bundle, this);
-    }
-
-    @NonNull
-    @Override
-    public Loader<JSONObject> onCreateLoader(int id, @Nullable Bundle args) {
-        NetworkUtils.JSONLoader jsonLoader = new NetworkUtils.JSONLoader(this, args);
-        jsonLoader.setOnStartLoadingListener(new NetworkUtils.JSONLoader.OnStartLoadingListener() {
-            @Override
-            public void onStartLoading() {
-                isLoading = true;
-                progressBarLoading.setVisibility(View.VISIBLE);
-            }
-        });
-        return jsonLoader;
-    }
-
-    @Override
-    public void onLoadFinished(@NonNull Loader<JSONObject> loader, JSONObject data) {
-        ArrayList<Movie> movies = JSONUtils.getMoviesFromJSON(data);
-        if (movies != null && !movies.isEmpty()) {
-            if (page == 1) {
-                viewModel.deleteAllMovies();
-                movieAdapter.clear();
-            }
-            for (Movie movie : movies) {
-                viewModel.insertMovie(movie);
-            }
-            movieAdapter.addMovies(movies);
-            page++;
-        }
-        isLoading = false;
-        progressBarLoading.setVisibility(View.INVISIBLE);
-        loaderManager.destroyLoader(LOADER_ID);
-    }
-
-    @Override
-    public void onLoaderReset(@NonNull Loader<JSONObject> loader) {
-
-    }
 
     @Override
     public void onBackPressed() {
