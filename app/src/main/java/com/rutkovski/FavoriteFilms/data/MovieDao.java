@@ -30,20 +30,13 @@ public interface MovieDao {
     void deleteAllMovies();
 
 
-    @Insert
-    void insertMovie(Movie movie);
-
     @Insert (onConflict = OnConflictStrategy.REPLACE)
     void insertAllMovies(List <Movie> movies);
 
 
-
-    @Delete
-    void deleteMovie(Movie movie);
-
     @Insert
     void insertFavouriteMovie(FavouriteMovie movie);
 
-    @Delete
-    void deleteFavouriteMovie(FavouriteMovie movie);
+    @Query("DELETE FROM favourite_movies WHERE id == :id")
+    void deleteFavouriteMovieById(int id);
 }

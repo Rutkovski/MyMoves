@@ -35,7 +35,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     }
 
     public interface OnReachEndListener {
-        void onReachEnd();
+        void onReachEnd(int position);
     }
 
     public void setOnPosterClickListener(OnPosterClickListener onPosterClickListener) {
@@ -57,14 +57,14 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     @Override
     public void onBindViewHolder(@NonNull MovieViewHolder movieViewHolder, int i) {
 
-        if (movies.size() >= 20 && movieViewHolder.getAdapterPosition() == movies.size() - 4 && onReachEndListener != null) {
-            onReachEndListener.onReachEnd();
-        }
 
         Movie movie = movies.get(i);
 
+        Picasso.get().load(movie.getSmallPosterPath()).into(movieViewHolder.imageViewSmallPoster);
 
-        Picasso.get().load(JSONUtils.BASE_POSTER_URL+JSONUtils.SMALL_POSTER_SIZE+movie.getPosterPath()).into(movieViewHolder.imageViewSmallPoster);
+        if (movies.size() >= 20 && i > movies.size() - 4 && onReachEndListener != null&&movieViewHolder.itemView.getWidth()>0) {
+            onReachEndListener.onReachEnd(i);
+        }
 
     }
 

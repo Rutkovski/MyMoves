@@ -15,4 +15,5 @@
     <string name="launch_trailer">Launch trailer</string>
     <string name="favorite_activity_title">Favorite</string>
     <string name="details_activity_title">Review</string>
+    <string name="error_load">Failed to load data, \nnetwork connection problem</string>
 </resources>

@@ -1,4 +1,4 @@
-package com.rutkovski.FavoriteFilms.screens;
+package com.rutkovski.FavoriteFilms.screens.listFilm;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,35 +12,33 @@ import android.widget.CompoundButton;
 import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.loader.app.LoaderManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.rutkovski.FavoriteFilms.R;
 import com.rutkovski.FavoriteFilms.adapters.MovieAdapter;
 import com.rutkovski.FavoriteFilms.data.pojo.Movie;
-import com.rutkovski.FavoriteFilms.utils.NetworkUtils;
+import com.rutkovski.FavoriteFilms.screens.detail.DetailActivity;
+import com.rutkovski.FavoriteFilms.screens.listFavoriteFilm.FavouriteActivity;
 
 import java.util.List;
-import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
     private static int methodOfSort;
-    private static boolean isLoading = true;
-    private RecyclerView recyclerViewPosters;
+    private static boolean isLoading = false;
     private MovieAdapter movieAdapter;
     private Switch switchSort;
     private TextView textViewTopRated;
     private TextView textViewPopularity;
     private ProgressBar progressBarLoading;
     private MainViewModel viewModel;
-    private int page;
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -71,8 +69,7 @@ public class MainActivity extends AppCompatActivity {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int width = (int) (displayMetrics.widthPixels / displayMetrics.density);
-
-        return width / 185 > 2 ? width / 185 : 2;
+        return Math.max(width / 185, 2);
 
     }
 
@@ -82,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
-        recyclerViewPosters = findViewById(R.id.RecyclerViewPosters);
+        RecyclerView recyclerViewPosters = findViewById(R.id.RecyclerViewPosters);
         switchSort = findViewById(R.id.switchSort);
         textViewTopRated = findViewById(R.id.textViewTopRated);
         textViewPopularity = findViewById(R.id.textViewPopularity);
@@ -90,46 +87,48 @@ public class MainActivity extends AppCompatActivity {
         recyclerViewPosters.setLayoutManager(new GridLayoutManager(this, getColumnCount()));
         movieAdapter = new MovieAdapter();
         recyclerViewPosters.setAdapter(movieAdapter);
-
         switchSort.setChecked(true);
 
         switchSort.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                page = 1;
                 setMethodSort(b);
             }
         });
         switchSort.setChecked(false);
 
-
-
         viewModel.getMovies().observe(this, new Observer<List<Movie>>() {
             @Override
             public void onChanged(List<Movie> movies) {
-//                if(page == 1){
-//                Log.i("test", "Устанавливаем фильмы в адаптер" + movies.size());
-//                movieAdapter.setMovies(movies);
-//                progressBarLoading.setVisibility(View.INVISIBLE);
-//                isLoading =false;
-//                }
-            }
-        });
-
-
-        viewModel.getNewMovies().observe(this, new Observer<List<Movie>>() {
-            @Override
-            public void onChanged(List<Movie> movies) {
-                Log.i("test", "Устанавливаем фильмы в адаптер" + movies.size());
-
-                movieAdapter.addMovies(movies);
+                movieAdapter.setMovies(movies);
                 progressBarLoading.setVisibility(View.INVISIBLE);
-                page++;
-                isLoading=false;
+                isLoading = false;
+            }
+        });
+        viewModel.getError().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                if (s != null) {
+                    Toast.makeText(MainActivity.this, s, Toast.LENGTH_SHORT).show();
+                    viewModel.clearError();
+                    progressBarLoading.setVisibility(View.INVISIBLE);
+                    isLoading = false;
+                }
             }
         });
 
 
+
+        movieAdapter.setOnReachEndListener(new MovieAdapter.OnReachEndListener() {
+            @Override
+            public void onReachEnd(int position) {
+                if (!isLoading) {
+                    progressBarLoading.setVisibility(View.VISIBLE);
+                    viewModel.loadDate(methodOfSort);
+                    isLoading = true;
+                }
+            }
+        });
 
         movieAdapter.setOnPosterClickListener(new MovieAdapter.OnPosterClickListener() {
             @Override
@@ -140,43 +139,30 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-        movieAdapter.setOnReachEndListener(new MovieAdapter.OnReachEndListener() {
-            @Override
-            public void onReachEnd() {
-                if(!isLoading) {
-                    Log.i("test", "блок слушателя конца списка");/*
-                    progressBarLoading.setVisibility(View.VISIBLE);
-                    viewModel.loadDate(methodOfSort, page);*/
-                }
-            }
-        });
     }
 
+
     public void onClickSetPopularity(View view) {
-        setMethodSort(false);
         switchSort.setChecked(false);
     }
 
     public void onClickSetTopRated(View view) {
-        setMethodSort(true);
         switchSort.setChecked(true);
     }
 
     private void setMethodSort(boolean isTopRated) {
         if (isTopRated) {
-            methodOfSort = NetworkUtils.TOP_RATED;
+            methodOfSort = MainViewModel.TOP_RATED;
             textViewTopRated.setTextColor(getResources().getColor(R.color.colorAccent));
             textViewPopularity.setTextColor(getResources().getColor(R.color.white_color));
         } else {
-            methodOfSort = NetworkUtils.POPULARITY;
+            methodOfSort = MainViewModel.POPULARITY;
             textViewPopularity.setTextColor(getResources().getColor(R.color.colorAccent));
             textViewTopRated.setTextColor(getResources().getColor(R.color.white_color));
         }
-        Log.i("test", "сработал переключатель");
-        movieAdapter.clear();
         progressBarLoading.setVisibility(View.VISIBLE);
-        viewModel.loadDate(methodOfSort,page);
+        viewModel.loadDate(methodOfSort);
+        Log.i("test", "я здесь");
     }
 
 

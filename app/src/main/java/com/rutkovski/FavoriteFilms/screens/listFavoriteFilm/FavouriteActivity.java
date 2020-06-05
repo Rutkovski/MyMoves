@@ -1,4 +1,4 @@
-package com.rutkovski.FavoriteFilms.screens;
+package com.rutkovski.FavoriteFilms.screens.listFavoriteFilm;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,7 +9,6 @@ import android.view.MenuItem;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -19,15 +18,16 @@ import com.rutkovski.FavoriteFilms.R;
 import com.rutkovski.FavoriteFilms.adapters.MovieAdapter;
 import com.rutkovski.FavoriteFilms.data.FavouriteMovie;
 import com.rutkovski.FavoriteFilms.data.pojo.Movie;
+import com.rutkovski.FavoriteFilms.screens.detail.DetailActivity;
+import com.rutkovski.FavoriteFilms.screens.listFilm.MainActivity;
+import com.rutkovski.FavoriteFilms.screens.listFilm.MainViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class FavouriteActivity extends AppCompatActivity {
 
-    private RecyclerView recyclerViewFavouriteMovies;
     private MovieAdapter adapter;
-    private MainViewModel viewModel;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -69,19 +69,17 @@ public class FavouriteActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        recyclerViewFavouriteMovies = findViewById(R.id.recyclerViewFavouriteMovies);
+        RecyclerView recyclerViewFavouriteMovies = findViewById(R.id.recyclerViewFavouriteMovies);
         recyclerViewFavouriteMovies.setLayoutManager(new GridLayoutManager(this, 2));
         adapter = new MovieAdapter();
         recyclerViewFavouriteMovies.setAdapter(adapter);
-        viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
-        LiveData<List<FavouriteMovie>> favouriteMovies = viewModel.getFavouriteMovies();
-        favouriteMovies.observe(this, new Observer<List<FavouriteMovie>>() {
+        FavoriteViewModel viewModel = ViewModelProviders.of(this).get(FavoriteViewModel.class);
+
+        viewModel.getFavouriteMovies().observe(this, new Observer<List<FavouriteMovie>>() {
             @Override
             public void onChanged(@Nullable List<FavouriteMovie> favouriteMovies) {
-                List<Movie> movies = new ArrayList<>();
                 if (favouriteMovies != null) {
-                    movies.addAll(favouriteMovies);
-                    adapter.setMovies(movies);
+                    adapter.setMovies(new ArrayList<Movie>(favouriteMovies));
                 }
             }
         });

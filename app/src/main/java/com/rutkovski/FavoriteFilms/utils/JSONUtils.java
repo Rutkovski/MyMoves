@@ -97,8 +97,8 @@ public class JSONUtils {
                 String backdropPath = objectMovie.getString(KEY_BACKDROP_PATH);
                 double voteAverage = objectMovie.getDouble(KEY_VOTE_AVERAGE);
                 String releaseDate = objectMovie.getString(KEY_RELEASE_DATE);
-                Movie movie = new Movie(id, voteCount, title, originalTitle, overview, posterPath, bigPosterPath, backdropPath, voteAverage, releaseDate);
-                result.add(movie);
+                //Movie movie = new Movie(id, voteCount, title, originalTitle, overview, posterPath, bigPosterPath, backdropPath, voteAverage, releaseDate);
+                //result.add(movie);
             }
         } catch (JSONException e) {
             e.printStackTrace();

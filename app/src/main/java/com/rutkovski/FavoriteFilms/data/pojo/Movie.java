@@ -10,6 +10,14 @@ import com.google.gson.annotations.SerializedName;
 @Entity(tableName = "movies")
 public class Movie {
 
+    @Ignore
+    private static final String BASE_POSTER_URL = "https://image.tmdb.org/t/p/";
+    @Ignore
+    private static final String SMALL_POSTER_SIZE = "w300";
+    @Ignore
+    private static final String BIG_POSTER_SIZE = "w780";
+
+
     @PrimaryKey(autoGenerate = true)
     private int uniqueId;
 
@@ -37,9 +45,6 @@ public class Movie {
     @Expose
     private String posterPath;
 
-    // что здесь???
-    private String bigPosterPath;
-
     @SerializedName("backdrop_path")
     @Expose
     private String backdropPath;
@@ -52,7 +57,7 @@ public class Movie {
     @Expose
     private String releaseDate;
 
-    public Movie(int uniqueId, int id, int voteCount, String title, String originalTitle, String overview, String posterPath, String bigPosterPath, String backdropPath, double voteAverage, String releaseDate) {
+    public Movie(int uniqueId, int id, int voteCount, String title, String originalTitle, String overview, String posterPath, String backdropPath, double voteAverage, String releaseDate) {
         this.uniqueId = uniqueId;
         this.id = id;
         this.voteCount = voteCount;
@@ -60,21 +65,19 @@ public class Movie {
         this.originalTitle = originalTitle;
         this.overview = overview;
         this.posterPath = posterPath;
-        this.bigPosterPath = bigPosterPath;
         this.backdropPath = backdropPath;
         this.voteAverage = voteAverage;
         this.releaseDate = releaseDate;
     }
 
     @Ignore
-    public Movie(int id, int voteCount, String title, String originalTitle, String overview, String posterPath, String bigPosterPath, String backdropPath, double voteAverage, String releaseDate) {
+    public Movie(int id, int voteCount, String title, String originalTitle, String overview, String posterPath, String backdropPath, double voteAverage, String releaseDate) {
         this.id = id;
         this.voteCount = voteCount;
         this.title = title;
         this.originalTitle = originalTitle;
         this.overview = overview;
         this.posterPath = posterPath;
-        this.bigPosterPath = bigPosterPath;
         this.backdropPath = backdropPath;
         this.voteAverage = voteAverage;
         this.releaseDate = releaseDate;
@@ -86,14 +89,6 @@ public class Movie {
 
     public void setUniqueId(int uniqueId) {
         this.uniqueId = uniqueId;
-    }
-
-    public String getBigPosterPath() {
-        return bigPosterPath;
-    }
-
-    public void setBigPosterPath(String bigPosterPath) {
-        this.bigPosterPath = bigPosterPath;
     }
 
     public int getId() {
@@ -168,4 +163,17 @@ public class Movie {
     public void setReleaseDate(String releaseDate) {
         this.releaseDate = releaseDate;
     }
+
+
+    public String getSmallPosterPath() {
+        return BASE_POSTER_URL+SMALL_POSTER_SIZE+posterPath;
+    }
+    public String getBigPosterPath() {
+        return BASE_POSTER_URL+BIG_POSTER_SIZE+posterPath;
+    }
+
+
+
+
+
 }

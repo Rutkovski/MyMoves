@@ -8,7 +8,7 @@ import androidx.room.RoomDatabase;
 
 import com.rutkovski.FavoriteFilms.data.pojo.Movie;
 
-@Database(entities = {Movie.class, FavouriteMovie.class}, version = 5, exportSchema = false)
+@Database(entities = {Movie.class, FavouriteMovie.class}, version = 7, exportSchema = false)
 public abstract class MovieDatabase extends RoomDatabase {
     private static final String DB_NAME = "movies.db";
     private static MovieDatabase database;

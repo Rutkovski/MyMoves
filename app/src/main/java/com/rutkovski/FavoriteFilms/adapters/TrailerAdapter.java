@@ -12,12 +12,17 @@ import com.rutkovski.FavoriteFilms.R;
 import com.rutkovski.FavoriteFilms.data.pojo.Trailer;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerViewHolder> {
 
     private OnTrailerClickListener onTrailerClickListener;
-    private ArrayList<Trailer> trailers;
+    private List <Trailer> trailers;
+
+    public TrailerAdapter() {
+        this.trailers = new ArrayList<>();
+    }
 
     @NonNull
     @Override
@@ -46,7 +51,7 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerV
         this.onTrailerClickListener = onTrailerClickListener;
     }
 
-    public void setTrailers(ArrayList<Trailer> trailers) {
+    public void setTrailers(List<Trailer> trailers) {
         this.trailers = trailers;
         notifyDataSetChanged();
     }

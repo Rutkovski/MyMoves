@@ -12,15 +12,19 @@ import com.rutkovski.FavoriteFilms.R;
 import com.rutkovski.FavoriteFilms.data.pojo.Review;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewViewHolder> {
 
-    private ArrayList<Review> reviews;
+    private List<Review> reviews;
 
-    public void setReviews(ArrayList<Review> reviews) {
+    public ReviewAdapter() {
+        this.reviews = new ArrayList<>();
+    }
+
+    public void setReviews(List<Review> reviews) {
         this.reviews = reviews;
         notifyDataSetChanged();
-
     }
 
     @NonNull

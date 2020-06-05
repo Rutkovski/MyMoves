@@ -1,7 +1,14 @@
 package com.rutkovski.FavoriteFilms.data.pojo;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 public class Trailer {
+    @SerializedName("key")
+    @Expose
     private String key;
+    @SerializedName("name")
+    @Expose
     private String name;
 
     public Trailer(String key, String name) {

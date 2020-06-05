@@ -16,4 +16,5 @@
     <string name="label_description">Описание:</string>
     <string name="favorite_activity_title">Избранное</string>
     <string name="details_activity_title">Обзор фильма</string>
+    <string name="error_load">Не удалось загрузить данные, \nпроблема с подключением к сети</string>
 </resources>
