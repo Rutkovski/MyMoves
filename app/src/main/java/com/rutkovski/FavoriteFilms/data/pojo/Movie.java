@@ -6,17 +6,10 @@ import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.rutkovski.NetworkConstants;
 
 @Entity(tableName = "movies")
 public class Movie {
-
-    @Ignore
-    private static final String BASE_POSTER_URL = "https://image.tmdb.org/t/p/";
-    @Ignore
-    private static final String SMALL_POSTER_SIZE = "w300";
-    @Ignore
-    private static final String BIG_POSTER_SIZE = "w780";
-
 
     @PrimaryKey(autoGenerate = true)
     private int uniqueId;
@@ -166,10 +159,10 @@ public class Movie {
 
 
     public String getSmallPosterPath() {
-        return BASE_POSTER_URL+SMALL_POSTER_SIZE+posterPath;
+        return NetworkConstants.BASE_POSTER_URL + NetworkConstants.SMALL_POSTER_SIZE+posterPath;
     }
     public String getBigPosterPath() {
-        return BASE_POSTER_URL+BIG_POSTER_SIZE+posterPath;
+        return NetworkConstants.BASE_POSTER_URL + NetworkConstants.BIG_POSTER_SIZE+posterPath;
     }
 
 

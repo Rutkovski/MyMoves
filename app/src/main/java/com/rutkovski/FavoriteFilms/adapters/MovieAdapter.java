@@ -1,20 +1,15 @@
 package com.rutkovski.FavoriteFilms.adapters;
 
-import android.app.Application;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.rutkovski.FavoriteFilms.R;
 import com.rutkovski.FavoriteFilms.data.pojo.Movie;
-import com.rutkovski.FavoriteFilms.utils.JSONUtils;
-import com.rutkovski.FavoriteFilms.utils.NetworkUtils;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;

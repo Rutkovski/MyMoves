@@ -3,7 +3,6 @@ package com.rutkovski.FavoriteFilms.screens.listFilm;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -20,7 +19,6 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.rutkovski.FavoriteFilms.R;
 import com.rutkovski.FavoriteFilms.adapters.MovieAdapter;
 import com.rutkovski.FavoriteFilms.data.pojo.Movie;
@@ -28,6 +26,9 @@ import com.rutkovski.FavoriteFilms.screens.detail.DetailActivity;
 import com.rutkovski.FavoriteFilms.screens.listFavoriteFilm.FavouriteActivity;
 
 import java.util.List;
+
+import static com.rutkovski.NetworkConstants.POPULARITY;
+import static com.rutkovski.NetworkConstants.TOP_RATED;
 
 public class MainActivity extends AppCompatActivity {
     private static int methodOfSort;
@@ -38,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView textViewPopularity;
     private ProgressBar progressBarLoading;
     private MainViewModel viewModel;
+    private GridLayoutManager gridLayoutManager;
+
 
 
     @Override
@@ -70,7 +73,6 @@ public class MainActivity extends AppCompatActivity {
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int width = (int) (displayMetrics.widthPixels / displayMetrics.density);
         return Math.max(width / 185, 2);
-
     }
 
     @Override
@@ -84,18 +86,24 @@ public class MainActivity extends AppCompatActivity {
         textViewTopRated = findViewById(R.id.textViewTopRated);
         textViewPopularity = findViewById(R.id.textViewPopularity);
         progressBarLoading = findViewById(R.id.progressBarLoading);
-        recyclerViewPosters.setLayoutManager(new GridLayoutManager(this, getColumnCount()));
+        gridLayoutManager = new GridLayoutManager(this, getColumnCount());
+        recyclerViewPosters.setLayoutManager(gridLayoutManager);
         movieAdapter = new MovieAdapter();
         recyclerViewPosters.setAdapter(movieAdapter);
-        switchSort.setChecked(true);
 
+        switchSort.setChecked(true);
         switchSort.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 setMethodSort(b);
             }
         });
-        switchSort.setChecked(false);
+        if (savedInstanceState != null) {
+            gridLayoutManager.scrollToPosition(savedInstanceState.getInt("adapterPosition", 0));
+        } else {
+            switchSort.setChecked(false);
+        }
+
 
         viewModel.getMovies().observe(this, new Observer<List<Movie>>() {
             @Override
@@ -116,8 +124,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-
-
 
         movieAdapter.setOnReachEndListener(new MovieAdapter.OnReachEndListener() {
             @Override
@@ -152,23 +158,27 @@ public class MainActivity extends AppCompatActivity {
 
     private void setMethodSort(boolean isTopRated) {
         if (isTopRated) {
-            methodOfSort = MainViewModel.TOP_RATED;
+            methodOfSort = TOP_RATED;
             textViewTopRated.setTextColor(getResources().getColor(R.color.colorAccent));
             textViewPopularity.setTextColor(getResources().getColor(R.color.white_color));
         } else {
-            methodOfSort = MainViewModel.POPULARITY;
+            methodOfSort = POPULARITY;
             textViewPopularity.setTextColor(getResources().getColor(R.color.colorAccent));
             textViewTopRated.setTextColor(getResources().getColor(R.color.white_color));
         }
         progressBarLoading.setVisibility(View.VISIBLE);
         viewModel.loadDate(methodOfSort);
-        Log.i("test", "я здесь");
     }
-
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         finish();
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("adapterPosition", gridLayoutManager.findFirstVisibleItemPosition());
     }
 }

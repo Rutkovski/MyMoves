@@ -2,6 +2,7 @@ package com.rutkovski.FavoriteFilms.screens.listFavoriteFilm;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -13,15 +14,12 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.rutkovski.FavoriteFilms.R;
 import com.rutkovski.FavoriteFilms.adapters.MovieAdapter;
 import com.rutkovski.FavoriteFilms.data.FavouriteMovie;
 import com.rutkovski.FavoriteFilms.data.pojo.Movie;
 import com.rutkovski.FavoriteFilms.screens.detail.DetailActivity;
 import com.rutkovski.FavoriteFilms.screens.listFilm.MainActivity;
-import com.rutkovski.FavoriteFilms.screens.listFilm.MainViewModel;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,7 +68,7 @@ public class FavouriteActivity extends AppCompatActivity {
         }
 
         RecyclerView recyclerViewFavouriteMovies = findViewById(R.id.recyclerViewFavouriteMovies);
-        recyclerViewFavouriteMovies.setLayoutManager(new GridLayoutManager(this, 2));
+        recyclerViewFavouriteMovies.setLayoutManager(new GridLayoutManager(this, getColumnCount()));
         adapter = new MovieAdapter();
         recyclerViewFavouriteMovies.setAdapter(adapter);
         FavoriteViewModel viewModel = ViewModelProviders.of(this).get(FavoriteViewModel.class);
@@ -93,4 +91,11 @@ public class FavouriteActivity extends AppCompatActivity {
             }
         });
     }
+    private int getColumnCount() {
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int width = (int) (displayMetrics.widthPixels / displayMetrics.density);
+        return Math.max(width / 185, 2);
+    }
+
 }

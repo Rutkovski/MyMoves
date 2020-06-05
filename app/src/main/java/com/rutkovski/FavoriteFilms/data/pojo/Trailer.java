@@ -2,6 +2,7 @@ package com.rutkovski.FavoriteFilms.data.pojo;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.rutkovski.NetworkConstants;
 
 public class Trailer {
     @SerializedName("key")
@@ -10,6 +11,8 @@ public class Trailer {
     @SerializedName("name")
     @Expose
     private String name;
+
+    private String fullKey;
 
     public Trailer(String key, String name) {
         this.key = key;
@@ -30,5 +33,9 @@ public class Trailer {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getFullKey() {
+        return NetworkConstants.BASE_YOUTUBE_URL+key;
     }
 }

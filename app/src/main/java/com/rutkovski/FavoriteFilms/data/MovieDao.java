@@ -2,7 +2,6 @@ package com.rutkovski.FavoriteFilms.data;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
-import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
@@ -30,11 +29,11 @@ public interface MovieDao {
     void deleteAllMovies();
 
 
-    @Insert (onConflict = OnConflictStrategy.REPLACE)
-    void insertAllMovies(List <Movie> movies);
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertAllMovies(List<Movie> movies);
 
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertFavouriteMovie(FavouriteMovie movie);
 
     @Query("DELETE FROM favourite_movies WHERE id == :id")

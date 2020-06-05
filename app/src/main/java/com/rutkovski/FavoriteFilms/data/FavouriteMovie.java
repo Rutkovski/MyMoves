@@ -7,7 +7,7 @@ import com.rutkovski.FavoriteFilms.data.pojo.Movie;
 
 @Entity(tableName = "favourite_movies")
 public class FavouriteMovie extends Movie {
-    public FavouriteMovie(int uniqueId, int id, int voteCount, String title, String originalTitle, String overview, String posterPath, String backdropPath, double voteAverage, String releaseDate) {
+    FavouriteMovie(int uniqueId, int id, int voteCount, String title, String originalTitle, String overview, String posterPath, String backdropPath, double voteAverage, String releaseDate) {
         super(uniqueId, id, voteCount, title, originalTitle, overview, posterPath, backdropPath, voteAverage, releaseDate);
     }
 

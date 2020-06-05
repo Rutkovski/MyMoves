@@ -1,13 +1,9 @@
 package com.rutkovski.FavoriteFilms.screens.detail;
-
 import android.app.Application;
 import android.os.AsyncTask;
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
-
 import com.rutkovski.FavoriteFilms.api.ApiFactory;
 import com.rutkovski.FavoriteFilms.api.ApiService;
 import com.rutkovski.FavoriteFilms.data.FavouriteMovie;
@@ -17,11 +13,11 @@ import com.rutkovski.FavoriteFilms.data.pojo.ListTrailer;
 import com.rutkovski.FavoriteFilms.data.pojo.Movie;
 import com.rutkovski.FavoriteFilms.data.pojo.Review;
 import com.rutkovski.FavoriteFilms.data.pojo.Trailer;
+import com.rutkovski.NetworkConstants;
 
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;
-
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
@@ -30,11 +26,11 @@ import io.reactivex.schedulers.Schedulers;
 
 
 public class DetailViewModel extends AndroidViewModel {
-    private static final String API_KEY = "62444a9c5ef6026706af098905a6867b";
     private static String lang = Locale.getDefault().getLanguage();
     private static MovieDatabase database;
     private MutableLiveData<List<Trailer>> trailersLiveData;
     private MutableLiveData<List<Review>> reviewsLiveData;
+    private CompositeDisposable compositeDisposable;
 
 
     public DetailViewModel(@NonNull Application application) {
@@ -44,17 +40,16 @@ public class DetailViewModel extends AndroidViewModel {
         reviewsLiveData = new MutableLiveData<>();
     }
 
+    boolean isFavorite(int id) {
+        return getFavouriteMovieById(id) != null;
+    }
 
-    public MutableLiveData<List<Trailer>> getTrailersLiveData() {
+    MutableLiveData<List<Trailer>> getTrailersLiveData() {
         return trailersLiveData;
     }
 
-    public MutableLiveData<List<Review>> getReviewsLiveData() {
+    MutableLiveData<List<Review>> getReviewsLiveData() {
         return reviewsLiveData;
-    }
-
-    boolean isFavorite(int id){
-        return getFavouriteMovieById(id) != null;
     }
 
     Movie getMovieById(int id) {
@@ -78,46 +73,41 @@ public class DetailViewModel extends AndroidViewModel {
     void insertFavouriteMovie(FavouriteMovie movie) {
         new InsertFavouriteTask().execute(movie);
     }
-
-    void deleteFavouriteMovieById (int id) {
+    void deleteFavouriteMovieById(int id) {
         new DeleteFavouriteTaskById().execute(id);
     }
-
 
     void loadDate(int id) {
         ApiFactory apiFactory = ApiFactory.getInstance();
         ApiService apiService = apiFactory.getApiService();
-        Disposable disposable = apiService.getTrailers(id, API_KEY, lang)
+        Disposable disposable = apiService.getTrailers(id, NetworkConstants.API_KEY, lang)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer <ListTrailer>() {
+                .subscribe(new Consumer<ListTrailer>() {
                     @Override
-                    public void accept(ListTrailer listTrailers) throws Exception {
+                    public void accept(ListTrailer listTrailers) {
                         trailersLiveData.setValue(listTrailers.getResults());
                     }
                 }, new Consumer<Throwable>() {
                     @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        Log.i("test", "ошибка в трейлерах" + throwable.toString());
-
+                    public void accept(Throwable throwable) {
                     }
                 });
-        Disposable disposable2 = apiService.getReview(id,lang,API_KEY).subscribeOn(Schedulers.io())
+        Disposable disposable2 = apiService.getReview(id, lang, NetworkConstants.API_KEY).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer <ListReview>() {
+                .subscribe(new Consumer<ListReview>() {
                     @Override
-                    public void accept(ListReview listReviews) throws Exception {
-                       reviewsLiveData.setValue(listReviews.getReviews());
+                    public void accept(ListReview listReviews) {
+                        reviewsLiveData.setValue(listReviews.getReviews());
                     }
                 }, new Consumer<Throwable>() {
                     @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        Log.i("test", "ошибка в отзывах" + throwable.toString());
+                    public void accept(Throwable throwable) {
 
                     }
                 });
 
-        CompositeDisposable compositeDisposable = new CompositeDisposable();
+        compositeDisposable = new CompositeDisposable();
         compositeDisposable.add(disposable);
         compositeDisposable.add(disposable2);
     }
@@ -164,5 +154,13 @@ public class DetailViewModel extends AndroidViewModel {
         }
     }
 
+
+    @Override
+    protected void onCleared() {
+        if (compositeDisposable != null) {
+            compositeDisposable.dispose();
+        }
+        super.onCleared();
+    }
 
 }

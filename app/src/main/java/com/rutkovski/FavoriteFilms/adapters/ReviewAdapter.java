@@ -4,13 +4,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.rutkovski.FavoriteFilms.R;
 import com.rutkovski.FavoriteFilms.data.pojo.Review;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,7 +47,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
         private TextView textViewAuthor;
         private TextView textViewContent;
 
-        public ReviewViewHolder(@NonNull View itemView) {
+        ReviewViewHolder(@NonNull View itemView) {
             super(itemView);
             textViewAuthor = itemView.findViewById(R.id.textViewAuthor);
             textViewContent = itemView.findViewById(R.id.textViewContent);

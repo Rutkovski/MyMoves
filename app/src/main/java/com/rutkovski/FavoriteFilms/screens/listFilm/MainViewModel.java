@@ -14,32 +14,27 @@ import com.rutkovski.FavoriteFilms.api.ApiService;
 import com.rutkovski.FavoriteFilms.data.MovieDatabase;
 import com.rutkovski.FavoriteFilms.data.pojo.ListMovies;
 import com.rutkovski.FavoriteFilms.data.pojo.Movie;
-
 import java.util.List;
 import java.util.Locale;
-
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
+import static com.rutkovski.NetworkConstants.API_KEY;
+import static com.rutkovski.NetworkConstants.MIN_VOTE_COUNT_VALUE;
+import static com.rutkovski.NetworkConstants.POPULARITY;
+import static com.rutkovski.NetworkConstants.SORT_BY_POPULARITY;
+import static com.rutkovski.NetworkConstants.SORT_BY_TOP_RATED;
 
 public class MainViewModel extends AndroidViewModel {
 
-    static final int POPULARITY = 0;
-    static final int TOP_RATED = 1;
-    private static final String API_KEY = "62444a9c5ef6026706af098905a6867b";
-    private static final String SORT_BY_POPULARITY = "popularity.desc";
-    private static final String SORT_BY_TOP_RATED = "vote_average.desc";
-    private static final int MIN_VOTE_COUNT_VALUE = 1000;
     private static String lang = Locale.getDefault().getLanguage();
     private static int page = 1;
     private static int lastSortBy;
     private CompositeDisposable compositeDisposable;
-
     private static MovieDatabase database;
     private LiveData<List<Movie>> movies;
-
     private MutableLiveData<String> error;
 
 
@@ -66,6 +61,8 @@ public class MainViewModel extends AndroidViewModel {
         new DeleteMoviesTask().execute();
     }
 
+
+    @SuppressWarnings("unchecked")
     private void insertListMovie(List<Movie> movies) {
         new InsertAllTask().execute(movies);
     }
@@ -91,7 +88,7 @@ public class MainViewModel extends AndroidViewModel {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<ListMovies>() {
                     @Override
-                    public void accept(ListMovies listMovies) throws Exception {
+                    public void accept(ListMovies listMovies)  {
                         List<Movie> movies = listMovies.getMovies();
 
                         if (page == 1) {
@@ -102,7 +99,7 @@ public class MainViewModel extends AndroidViewModel {
                     }
                 }, new Consumer<Throwable>() {
                     @Override
-                    public void accept(Throwable throwable) throws Exception {
+                    public void accept(Throwable throwable) {
                         error.setValue(getApplication().getString(R.string.error_load));
                     }
                 });
@@ -113,8 +110,9 @@ public class MainViewModel extends AndroidViewModel {
 
 
     private static class InsertAllTask extends AsyncTask<List<Movie>, Void, Void> {
+        @SafeVarargs
         @Override
-        protected Void doInBackground(List<Movie>... movies) {
+        protected final Void doInBackground(List<Movie>... movies) {
             if (movies != null && movies.length > 0) {
                 database.movieDao().insertAllMovies(movies[0]);
             }

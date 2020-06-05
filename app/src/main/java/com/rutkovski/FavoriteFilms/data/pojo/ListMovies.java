@@ -1,5 +1,4 @@
 package com.rutkovski.FavoriteFilms.data.pojo;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -9,6 +8,7 @@ public class ListMovies {
 
     @SerializedName("results")
     @Expose
+    private
     List<Movie> movies;
 
     public List<Movie> getMovies() {

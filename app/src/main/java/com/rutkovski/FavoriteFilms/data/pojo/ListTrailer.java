@@ -1,5 +1,4 @@
 package com.rutkovski.FavoriteFilms.data.pojo;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
