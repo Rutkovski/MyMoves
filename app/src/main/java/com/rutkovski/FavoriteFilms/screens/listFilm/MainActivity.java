@@ -147,7 +147,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-
     public void onClickSetPopularity(View view) {
         switchSort.setChecked(false);
     }
